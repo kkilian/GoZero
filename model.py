@@ -1,0 +1,41 @@
+import torch 
+from torch import nn 
+import numpy as np
+import torch.nn.functional as F
+
+import numpy as np
+np.set_printoptions(suppress=False)
+import torch
+import torch.nn  as nn
+import torch.nn.functional as F
+torch.set_printoptions(sci_mode=False)
+import math
+
+class c_model(nn.Module):
+    def __init__(self, board_size):
+        super(c_model, self).__init__()
+        self.size = board_size
+        self.fc1 = nn.Linear(in_features=self.size, out_features=16)
+        self.fc2 = nn.Linear(in_features=16, out_features=16)
+
+        # Sublayer with 128 neurons
+        self.sublayer = nn.Linear(in_features=16, out_features=128)
+
+        # Two heads on our network
+        self.action_head = nn.Linear(in_features=128, out_features=16)
+        self.value_head = nn.Linear(in_features=128, out_features=1)
+
+    def forward(self, x):
+        x = x.view(-1, 16)
+
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+
+        # Apply the sublayer with 128 neurons
+        x = F.relu(self.sublayer(x))
+
+        action_logits = self.action_head(x)
+        value_logit = self.value_head(x)
+
+        return torch.tanh(value_logit)
+    
