@@ -32,7 +32,7 @@ class c_model(nn.Module):
         x = F.relu(self.sublayer(x))
         action_logits = self.action_head(x)
         value_logit = self.value_head(x)
-        return torch.tanh(value_logit)
+        return torch.tanh(value_logit) #for now return just value network output
 
     def predict(self, board):
         board = torch.FloatTensor(board.astype(np.float32))
