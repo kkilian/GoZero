@@ -19,9 +19,6 @@ class Connect2Game:
     def get_next_state(self, board, player, action):
         b = board.clone().detach()
         b[action] = player
-
-        # Return the new game, but
-        # change the perspective of the game with negative
         return (b, -player)
 
     def has_legal_moves(self, board):
